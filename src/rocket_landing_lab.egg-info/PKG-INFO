@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: rocket-landing-lab
+Version: 0.1.0
+Summary: Reinforcement learning project for autonomous lunar landing
+Requires-Python: >=3.12
