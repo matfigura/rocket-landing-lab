@@ -6,11 +6,13 @@ def main() -> None:
     env = create_environment(render_mode="human")
 
     try:
-        total_reward, step_count = run_random_episode(env)
+        result = run_random_episode(env)
 
         print("\nEpizod zakończony")
-        print(f"Liczba kroków: {step_count}")
-        print(f"Łączna nagroda: {total_reward:.2f}")
+        print(f"Liczba kroków: {result.steps}")
+        print(f"Łączna nagroda: {result.total_reward:.2f}")
+        print(f"Terminated: {result.terminated}")
+        print(f"Truncated: {result.truncated}")
 
     finally:
         env.close()

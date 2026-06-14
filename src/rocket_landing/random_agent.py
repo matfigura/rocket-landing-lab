@@ -1,33 +1,42 @@
 from gymnasium import Env
 
+from rocket_landing.models import EpisodeResult
+
 
 def run_random_episode(
     env: Env,
     seed: int | None = None,
-) -> tuple[float, int]:
-    """Uruchamia jeden epizod z losowymi akcjami.
+    max_steps: int = 1000,
+) -> EpisodeResult:
+    
 
-    Zwraca:
-        tuple zawierającą łączną nagrodę i liczbę kroków.
-    """
+    if max_steps <= 0:
+        raise ValueError("max_steps musi być większe od zera")
 
-    observation, info = env.reset(seed=seed)
+    env.reset(seed=seed)
 
     if seed is not None:
         env.action_space.seed(seed)
 
     total_reward = 0.0
     step_count = 0
-    episode_finished = False
+    terminated = False
+    truncated = False
 
-    while not episode_finished:
+    while not terminated and not truncated and step_count < max_steps:
         action = env.action_space.sample()
 
-        observation, reward, terminated, truncated, info = env.step(action)
+        _, reward, terminated, truncated, _ = env.step(action)
 
         total_reward += float(reward)
         step_count += 1
 
-        episode_finished = terminated or truncated
+    if step_count >= max_steps and not terminated:
+        truncated = True
 
-    return total_reward, step_count
+    return EpisodeResult(
+        total_reward=total_reward,
+        steps=step_count,
+        terminated=terminated,
+        truncated=truncated,
+    )

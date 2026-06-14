@@ -8,7 +8,7 @@ RenderMode = Literal["human", "rgb_array"] | None
 
 
 def create_environment(render_mode: RenderMode = None) -> Env:
-    """Tworzy środowisko LunarLander-v3."""
+    
 
     return gym.make(
         "LunarLander-v3",
