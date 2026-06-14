@@ -8,3 +8,15 @@ class EpisodeResult:
     steps: int
     terminated: bool
     truncated: bool
+
+@dataclass(frozen=True)
+class EvaluationSummary:
+
+    episodes: int
+    mean_reward: float
+    best_reward: float
+    worst_reward: float
+    mean_steps: float
+    successful_episodes: int
+    terminated_episodes: int
+    truncated_episodes: int
