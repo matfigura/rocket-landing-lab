@@ -1,11 +1,23 @@
-from rocket_landing.models import EvaluationSummary, QualityGateResult
+from rocket_landing.config import (
+    DEFAULT_MAXIMUM_TRUNCATED_EPISODES,
+    DEFAULT_MINIMUM_MEAN_REWARD,
+    DEFAULT_MINIMUM_SUCCESSFUL_EPISODES,
+)
+from rocket_landing.models import (
+    EvaluationSummary,
+    QualityGateResult,
+)
 
 
 def evaluate_quality_gate(
     summary: EvaluationSummary,
-    minimum_mean_reward: float = -300.0,
-    maximum_truncated_episodes: int = 10,
-    minimum_successful_episodes: int = 0,
+    minimum_mean_reward: float = DEFAULT_MINIMUM_MEAN_REWARD,
+    maximum_truncated_episodes: int = (
+        DEFAULT_MAXIMUM_TRUNCATED_EPISODES
+    ),
+    minimum_successful_episodes: int = (
+        DEFAULT_MINIMUM_SUCCESSFUL_EPISODES
+    ),
 ) -> QualityGateResult:
     
     if summary.episodes <= 0:

@@ -1,8 +1,8 @@
 import argparse
 from pathlib import Path
+from collections.abc import Sequence
 
 from rocket_landing.baseline import (
-    DEFAULT_REPORT_PATH,
     print_baseline_summary,
     run_baseline,
 )
@@ -13,6 +13,15 @@ from rocket_landing.check_quality import (
 from rocket_landing.main import (
     play_random_episode,
     print_episode_result,
+)
+from rocket_landing.config import (
+    DEFAULT_EPISODES,
+    DEFAULT_MAXIMUM_TRUNCATED_EPISODES,
+    DEFAULT_MAX_STEPS,
+    DEFAULT_MINIMUM_MEAN_REWARD,
+    DEFAULT_MINIMUM_SUCCESSFUL_EPISODES,
+    DEFAULT_REPORT_PATH,
+    DEFAULT_SEED,
 )
 
 
@@ -103,7 +112,7 @@ def build_parser() -> argparse.ArgumentParser:
     play_parser.add_argument(
         "--max-steps",
         type=int,
-        default=1000,
+        default=DEFAULT_MAX_STEPS,
         help="Maksymalna liczba kroków epizodu",
     )
 
@@ -117,21 +126,21 @@ def build_parser() -> argparse.ArgumentParser:
     baseline_parser.add_argument(
         "--episodes",
         type=int,
-        default=100,
+        default=DEFAULT_EPISODES,
         help="Liczba epizodów ewaluacyjnych",
     )
 
     baseline_parser.add_argument(
         "--seed",
         type=int,
-        default=42,
+        default=DEFAULT_SEED,
         help="Bazowy seed eksperymentu",
     )
 
     baseline_parser.add_argument(
         "--max-steps",
         type=int,
-        default=1000,
+        default=DEFAULT_MAX_STEPS,
         help="Maksymalna liczba kroków jednego epizodu",
     )
 
@@ -159,21 +168,21 @@ def build_parser() -> argparse.ArgumentParser:
     quality_parser.add_argument(
         "--minimum-mean-reward",
         type=float,
-        default=-300.0,
+        default=DEFAULT_MINIMUM_MEAN_REWARD,
         help="Minimalna dopuszczalna średnia nagroda",
     )
 
     quality_parser.add_argument(
         "--maximum-truncated",
         type=int,
-        default=10,
+        default=DEFAULT_MAXIMUM_TRUNCATED_EPISODES,
         help="Maksymalna liczba przerwanych epizodów",
     )
 
     quality_parser.add_argument(
         "--minimum-successful",
         type=int,
-        default=0,
+        default=DEFAULT_MINIMUM_SUCCESSFUL_EPISODES,
         help="Minimalna liczba udanych epizodów",
     )
 
@@ -182,10 +191,10 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main() -> int:
-    """Główny punkt wejścia CLI."""
+def main(argv: Sequence[str] | None = None) -> int:
+   
 
     parser = build_parser()
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     return args.handler(args)

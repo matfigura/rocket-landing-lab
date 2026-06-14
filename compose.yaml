@@ -1,0 +1,21 @@
+services:
+  rocket-landing:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+
+    image: rocket-landing-lab:0.1.0
+
+    volumes:
+      - type: bind
+        source: ./reports
+        target: /app/reports
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+
+    image: rocket-landing-lab:test

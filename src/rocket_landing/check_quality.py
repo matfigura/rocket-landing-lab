@@ -3,16 +3,24 @@ from pathlib import Path
 from rocket_landing.models import EvaluationSummary, QualityGateResult
 from rocket_landing.quality_gate import evaluate_quality_gate
 from rocket_landing.reporting import load_evaluation_summary
+from rocket_landing.config import (
+    DEFAULT_MAXIMUM_TRUNCATED_EPISODES,
+    DEFAULT_MINIMUM_MEAN_REWARD,
+    DEFAULT_MINIMUM_SUCCESSFUL_EPISODES,
+    DEFAULT_REPORT_PATH,
+)
 
-
-DEFAULT_REPORT_PATH = Path("reports/random_agent_baseline.json")
 
 
 def run_quality_check(
     report_path: str | Path = DEFAULT_REPORT_PATH,
-    minimum_mean_reward: float = -300.0,
-    maximum_truncated_episodes: int = 10,
-    minimum_successful_episodes: int = 0,
+    minimum_mean_reward: float = DEFAULT_MINIMUM_MEAN_REWARD,
+    maximum_truncated_episodes: int = (
+        DEFAULT_MAXIMUM_TRUNCATED_EPISODES
+    ),
+    minimum_successful_episodes: int = (
+        DEFAULT_MINIMUM_SUCCESSFUL_EPISODES
+    ),
 ) -> tuple[EvaluationSummary, QualityGateResult]:
 
 

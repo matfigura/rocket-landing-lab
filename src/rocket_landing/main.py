@@ -1,11 +1,11 @@
 from rocket_landing.environment import create_environment
 from rocket_landing.models import EpisodeResult
 from rocket_landing.random_agent import run_random_episode
-
+from rocket_landing.config import DEFAULT_MAX_STEPS
 
 def play_random_episode(
     seed: int | None = None,
-    max_steps: int = 1000,
+    max_steps: int = DEFAULT_MAX_STEPS,
 ) -> EpisodeResult:
   
 

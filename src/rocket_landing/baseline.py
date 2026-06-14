@@ -4,18 +4,23 @@ from rocket_landing.environment import create_environment
 from rocket_landing.evaluator import evaluate_random_agent
 from rocket_landing.models import EvaluationSummary
 from rocket_landing.reporting import save_evaluation_summary
+from rocket_landing.config import (
+    DEFAULT_EPISODES,
+    DEFAULT_MAX_STEPS,
+    DEFAULT_REPORT_PATH,
+    DEFAULT_SEED,
+)
 
 
-DEFAULT_REPORT_PATH = Path("reports/random_agent_baseline.json")
 
 
 def run_baseline(
-    episodes: int = 100,
-    base_seed: int | None = 42,
-    max_steps: int = 1000,
+    episodes: int = DEFAULT_EPISODES,
+    base_seed: int | None = DEFAULT_SEED,
+    max_steps: int = DEFAULT_MAX_STEPS,
     output_path: str | Path = DEFAULT_REPORT_PATH,
 ) -> tuple[EvaluationSummary, Path]:
-    """Uruchamia ewaluację losowego agenta i zapisuje raport."""
+
 
     env = create_environment()
 
