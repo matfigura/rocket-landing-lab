@@ -1,5 +1,11 @@
+from pathlib import Path
+
 from rocket_landing.environment import create_environment
 from rocket_landing.evaluator import evaluate_random_agent
+from rocket_landing.reporting import save_evaluation_summary
+
+
+REPORT_PATH = Path("reports/random_agent_baseline.json")
 
 
 def main() -> None:
@@ -11,6 +17,11 @@ def main() -> None:
             episodes=100,
             base_seed=42,
             max_steps=1000,
+        )
+
+        report_path = save_evaluation_summary(
+            summary=summary,
+            output_path=REPORT_PATH,
         )
 
         print("\nRandom Agent Baseline")
@@ -25,6 +36,8 @@ def main() -> None:
         )
         print(f"Terminated episodes: {summary.terminated_episodes}")
         print(f"Truncated episodes: {summary.truncated_episodes}")
+
+        print(f"\nReport saved to: {report_path.resolve()}")
 
     finally:
         env.close()
