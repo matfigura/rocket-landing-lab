@@ -20,3 +20,9 @@ class EvaluationSummary:
     successful_episodes: int
     terminated_episodes: int
     truncated_episodes: int
+
+@dataclass(frozen=True)
+class QualityGateResult:
+
+    passed: bool
+    failures: tuple[str, ...]

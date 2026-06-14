@@ -9,7 +9,7 @@ def save_evaluation_summary(
     summary: EvaluationSummary,
     output_path: str | Path,
 ) -> Path:
-    
+    """Zapisuje podsumowanie ewaluacji do pliku JSON."""
 
     path = Path(output_path)
 
@@ -32,3 +32,19 @@ def save_evaluation_summary(
         file.write("\n")
 
     return path
+
+
+def load_evaluation_summary(
+    input_path: str | Path,
+) -> EvaluationSummary:
+    """Odczytuje podsumowanie ewaluacji z pliku JSON."""
+
+    path = Path(input_path)
+
+    with path.open(
+        mode="r",
+        encoding="utf-8",
+    ) as file:
+        summary_data = json.load(file)
+
+    return EvaluationSummary(**summary_data)
