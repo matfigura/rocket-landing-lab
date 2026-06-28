@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    name: Test and build Docker image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Build test image
+        run: docker compose build tests
+
+      - name: Run tests
+        run: docker compose run --rm tests
+
+      - name: Run Ruff
+        run: docker compose run --rm tests ruff check .
+
+      - name: Build runtime image
+        run: docker compose build rocket-landing
+
+      - name: Run CLI help smoke test
+        run: docker compose run --rm rocket-landing --help
+
+      - name: Run baseline smoke test
+        run: |
+          mkdir -p reports
+          docker compose run --rm rocket-landing baseline --episodes 2 --max-steps 20
+
+      - name: Run quality gate smoke test
+        run: docker compose run --rm rocket-landing check-quality --minimum-mean-reward -1000 --maximum-truncated 2
