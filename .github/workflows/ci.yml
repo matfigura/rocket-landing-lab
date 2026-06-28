@@ -31,13 +31,11 @@ jobs:
         run: docker compose build rocket-landing
 
       - name: Run CLI help smoke test
-        run: docker compose run --rm rocket-landing --help
+        run: docker run --rm rocket-landing-lab:0.1.0 --help
 
-      - name: Run baseline smoke test
+      - name: Run baseline and quality gate smoke test
         run: |
-          mkdir -p reports
-          chmod 777 reports
-          docker compose run --rm rocket-landing baseline --episodes 2 --max-steps 20
-
-      - name: Run quality gate smoke test
-        run: docker compose run --rm rocket-landing check-quality --minimum-mean-reward -1000 --maximum-truncated 2
+          docker run --rm \
+            --entrypoint sh \
+            rocket-landing-lab:0.1.0 \
+            -c "python -m rocket_landing baseline --episodes 2 --max-steps 20 && python -m rocket_landing check-quality --minimum-mean-reward -1000 --maximum-truncated 2"
