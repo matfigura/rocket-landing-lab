@@ -36,6 +36,7 @@ jobs:
       - name: Run baseline smoke test
         run: |
           mkdir -p reports
+          chmod 777 reports
           docker compose run --rm rocket-landing baseline --episodes 2 --max-steps 20
 
       - name: Run quality gate smoke test
