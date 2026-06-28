@@ -11,7 +11,7 @@ def evaluate_random_agent(
     max_steps: int = 1000,
     success_threshold: float = 200.0,
 ) -> EvaluationSummary:
-    """Ewaluuje losowego agenta na wielu epizodach."""
+  
 
     if episodes <= 0:
         raise ValueError("episodes musi być większe od zera")
