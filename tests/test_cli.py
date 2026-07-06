@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from rocket_landing.cli import main
 import rocket_landing.cli as cli
 from rocket_landing.models import (
     EpisodeResult,
@@ -11,7 +12,7 @@ from rocket_landing.models import (
 
 
 def create_summary() -> EvaluationSummary:
-    """Tworzy przykładowe podsumowanie do testów CLI."""
+
 
     return EvaluationSummary(
         episodes=10,
@@ -235,3 +236,44 @@ def test_unknown_command_returns_argparse_error() -> None:
         cli.main(["unknown-command"])
 
     assert error.value.code == 2
+
+def test_train_command_passes_arguments(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
+    captured_arguments: dict[str, object] = {}
+
+    output_path = tmp_path / "dqn_model.zip"
+
+    def fake_run_dqn_training(
+        total_timesteps: int,
+        seed: int | None,
+        output_path: str | Path,
+    ) -> Path:
+        captured_arguments["total_timesteps"] = total_timesteps
+        captured_arguments["seed"] = seed
+        captured_arguments["output_path"] = output_path
+
+        return Path(output_path)
+
+    monkeypatch.setattr(
+        "rocket_landing.cli.run_dqn_training",
+        fake_run_dqn_training,
+    )
+
+    exit_code = main(
+        [
+            "train",
+            "--timesteps",
+            "123",
+            "--seed",
+            "7",
+            "--output",
+            str(output_path),
+        ]
+    )
+
+    assert exit_code == 0
+    assert captured_arguments["total_timesteps"] == 123
+    assert captured_arguments["seed"] == 7
+    assert captured_arguments["output_path"] == output_path
